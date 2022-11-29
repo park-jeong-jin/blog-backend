@@ -1,5 +1,6 @@
 package com.jin.blog.service;
 
+import com.jin.blog.domain.Board;
 import com.jin.blog.domain.Comment;
 import com.jin.blog.dto.CommentDto;
 import com.jin.blog.repository.CommentRepository;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,6 +20,8 @@ public class CommentService {
 
   @Autowired
   CommentRepository commentRepository;
+  @Autowired
+  BoardService boardService;
 
   public Comment findById(Long id) {
     Optional<Comment> comment = commentRepository.findById(id);
@@ -37,6 +41,9 @@ public class CommentService {
 
   public Long create(CommentDto.CommentRequest dto) {
     Comment comment = dto.toEntity();
+    Board board = boardService.findById(dto.getBoardId());
+    comment.setBoard(board);
+    comment.setCreatedDate(LocalDateTime.now());
     commentRepository.save(comment);
     return comment.getId();
   }

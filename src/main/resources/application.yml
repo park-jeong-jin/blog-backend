@@ -1,11 +1,10 @@
 server:
   port: 3308
+  servlet:
+    session:
+      timeout: 30m
 
 spring:
-  output:
-    ansi:
-      enabled: always
-
   jpa:
     show-sql: true
     hibernate:

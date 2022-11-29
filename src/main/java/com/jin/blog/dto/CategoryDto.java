@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CategoryDto {
 
@@ -39,7 +40,7 @@ public class CategoryDto {
     Integer sequence;
     String type;
     String name;
-    List<Category> children;
+    List<CategoryDwResponse> children;
 
     @Builder
     private CategoryDwResponse(
@@ -49,7 +50,7 @@ public class CategoryDto {
       this.sequence = category.getSequence();
       this.type = category.getType();
       this.name = category.getName();
-      this.children = category.getChildren();
+      this.children = category.getChildren().stream().map(child -> CategoryDwResponse.builder().category(child).build()).collect(Collectors.toList());
     }
   }
 

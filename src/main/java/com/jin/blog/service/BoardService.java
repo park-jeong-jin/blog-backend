@@ -1,8 +1,11 @@
 package com.jin.blog.service;
 
 import com.jin.blog.domain.Board;
+import com.jin.blog.domain.Category;
 import com.jin.blog.dto.BoardDto;
+import com.jin.blog.dto.CommentDto;
 import com.jin.blog.repository.BoardRepository;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +24,8 @@ public class BoardService {
 
   @Autowired
   BoardRepository boardRepository;
+  @Autowired
+  CategoryService categoryService;
 
   public Board findById(Long id) {
     Optional<Board> board = boardRepository.findById(id);
@@ -30,22 +35,24 @@ public class BoardService {
 
   public BoardDto.BoardDwResponse findDw(Long id) {
     Board board = findById(id);
-    board.setHits(board.getHits() + 1);
     return Board.toDtoDw(board);
   }
 
   public List<BoardDto.BoardResponse> findAll(BoardDto.BoardFilter dto) {
-    List<Board> boards = boardRepository.findAllByCategoryId(dto.getCategoryId());
+    Category category = ObjectUtils.isEmpty(dto.getCategoryId()) ? null : categoryService.findById(dto.getCategoryId());
+    List<Board> boards = boardRepository.findAllByCategory(category);
     return boards.stream().map(Board::toDto).collect(Collectors.toList());
   }
 
   public Page<BoardDto.BoardResponse> findAllPaging(BoardDto.BoardFilter dto, Pageable pageable) {
-    Page<Board> boards = boardRepository.findAllByCategoryId(dto.getCategoryId(), pageable);
+    Page<Board> boards = ObjectUtils.isEmpty(dto.getCategoryId()) ? boardRepository.findAll(pageable) : boardRepository.findAllByCategory(categoryService.findById(dto.getCategoryId()), pageable);
     return boards.map(Board::toDto);
   }
 
   public Long create(BoardDto.BoardRequest dto) {
     Board board = dto.toEntity();
+    Category category = categoryService.findById(dto.getCategoryId());
+    board.setCategory(category);
     board.setCreatedDate(LocalDateTime.now());
     boardRepository.save(board);
     return board.getId();

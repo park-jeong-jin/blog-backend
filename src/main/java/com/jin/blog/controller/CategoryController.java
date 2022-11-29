@@ -71,38 +71,4 @@ public class CategoryController {
   ) {
     categoryService.delete(id);
   }
-
-  @Operation(summary = "메뉴 저장", description = "메뉴 저장입니다.")
-  @PostMapping("/init")
-  @ResponseBody
-  @ResponseStatus(value = HttpStatus.OK)
-  public void init() {
-    for (Integer i = 0; i < 2; i++) {
-      CategoryDto.CategoryRequest dto1 = CategoryDto.CategoryRequest.builder()
-          .sequence(i + 1)
-          .name("대메뉴-" + (i + 1))
-          .type("GROUP")
-          .build();
-      Long id1 = categoryService.create(dto1);
-      for (Integer j = 0; j < 2; j++) {
-        CategoryDto.CategoryRequest dto2 = CategoryDto.CategoryRequest.builder()
-            .sequence(j + 1)
-            .name("중메뉴-" + (j + 1))
-            .type("GROUP")
-            .parentId(id1)
-            .build();
-        Long id2 = categoryService.create(dto2);
-        for (Integer k = 0; k < 3; k++) {
-          CategoryDto.CategoryRequest dto3 = CategoryDto.CategoryRequest.builder()
-              .sequence(k + 1)
-              .name("소메뉴-" + (k + 1))
-              .type("GROUP")
-              .parentId(id2)
-              .build();
-          Long id3 = categoryService.create(dto3);
-        }
-      }
-    }
-  }
-
 }

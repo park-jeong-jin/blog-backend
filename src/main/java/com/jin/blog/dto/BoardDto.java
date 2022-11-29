@@ -1,7 +1,6 @@
 package com.jin.blog.dto;
 
 import com.jin.blog.domain.Board;
-import com.jin.blog.domain.Comment;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +8,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BoardDto {
 
@@ -20,7 +20,6 @@ public class BoardDto {
     String title;
     String content;
     String writer;
-    Integer hits;
     LocalDateTime createdDate;
     LocalDateTime updatedDate;
 
@@ -29,11 +28,10 @@ public class BoardDto {
         Board board
     ) {
       this.id = board.getId();
-      this.categoryId = board.getCategoryId();
+      // this.categoryId = board.getCategory().getId();
       this.title = board.getTitle();
       this.content = board.getContent();
       this.writer = board.getWriter();
-      this.hits = board.getHits();
       this.createdDate = board.getCreatedDate();
       this.updatedDate = board.getUpdatedDate();
     }
@@ -41,14 +39,14 @@ public class BoardDto {
 
   @Getter
   public static class BoardDwResponse extends BoardResponse {
-    List<Comment> comments;
+    List<CommentDto.CommentDwResponse> comments;
 
     @Builder(builderMethodName = "builderDw")
     private BoardDwResponse(
         Board board
     ) {
       super(board);
-      this.comments = board.getComments();
+      this.comments = board.getComments().stream().map(comment -> CommentDto.CommentDwResponse.builder().comment(comment).build()).collect(Collectors.toList());
     }
   }
 
@@ -81,7 +79,6 @@ public class BoardDto {
           .title(this.title)
           .content(this.content)
           .writer(writer)
-          .hits(0)
           .build();
     }
   }
@@ -93,5 +90,20 @@ public class BoardDto {
     String titleL;
     String contentL;
     String writerL;
+
+    @Builder
+    public BoardFilter(
+        Long id,
+        Long categoryId,
+        String titleL,
+        String contentL,
+        String writerL
+    ) {
+      this.id = id;
+      this.categoryId = categoryId;
+      this.titleL = titleL;
+      this.contentL = contentL;
+      this.writerL = writerL;
+    }
   }
 }

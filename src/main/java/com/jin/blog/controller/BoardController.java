@@ -77,24 +77,4 @@ public class BoardController {
     boardService.delete(id);
   }
 
-  @Operation(summary = "게시글 저장", description = "게시글 저장입니다.")
-  @PostMapping("/init")
-  @ResponseBody
-  @ResponseStatus(value = HttpStatus.OK)
-  public void init(
-      @RequestParam Long categoryId,
-      @RequestParam Integer count,
-      @RequestParam String desc
-  ) {
-    for (Integer i = 1; i <= count; i++) {
-      BoardDto.BoardRequest dto = BoardDto.BoardRequest.builder()
-          .categoryId(categoryId)
-          .title("자동입력" + desc + i)
-          .content("자동입력입니다." + desc + i)
-          .writer("Swagger")
-          .build();
-      boardService.create(dto);
-    }
-  }
-
 }

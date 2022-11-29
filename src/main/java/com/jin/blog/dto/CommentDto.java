@@ -8,6 +8,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommentDto {
 
@@ -16,7 +17,6 @@ public class CommentDto {
   public static class CommentResponse {
     Long id;
     Long parentId;
-    Long boardId;
     String content;
     String writer;
     LocalDateTime createdDate;
@@ -28,7 +28,6 @@ public class CommentDto {
     ) {
       this.id = comment.getId();
       this.parentId = comment.getParentId();
-      this.boardId = comment.getBoardId();
       this.content = comment.getContent();
       this.writer = comment.getWriter();
       this.createdDate = comment.getCreatedDate();
@@ -40,22 +39,20 @@ public class CommentDto {
   @AllArgsConstructor(access = AccessLevel.PUBLIC)
   public static class CommentDwResponse {
     Long id;
-    Long boardId;
     String content;
     String writer;
     LocalDateTime createdDate;
     LocalDateTime updatedDate;
-    List<Comment> children;
+    List<CommentDwResponse> children;
 
     @Builder
     private CommentDwResponse(
         Comment comment
     ) {
       this.id = comment.getId();
-      this.boardId = comment.getBoardId();
       this.content = comment.getContent();
       this.writer = comment.getWriter();
-      this.children = comment.getChildren();
+      this.children = comment.getChildren().stream().map(child -> CommentDwResponse.builder().comment(child).build()).collect(Collectors.toList());
     }
   }
 
@@ -86,7 +83,6 @@ public class CommentDto {
       return Comment.builder()
           .id(this.id)
           .parentId(this.parentId)
-          .boardId(this.boardId)
           .content(this.content)
           .writer(this.writer)
           .build();
@@ -99,5 +95,18 @@ public class CommentDto {
     Long parentId;
     Long boardId;
     String writer;
+
+    @Builder
+    public CommentFilter(
+        Long id,
+        Long parentId,
+        Long boardId,
+        String writer
+    ) {
+      this.id = id;
+      this.parentId = parentId;
+      this.boardId = boardId;
+      this.writer = writer;
+    }
   }
 }
