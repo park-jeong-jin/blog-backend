@@ -1,6 +1,6 @@
 package com.jin.blog.dto;
 
-import com.jin.blog.domain.Category;
+import com.jin.blog.domain.Menu;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,11 +10,11 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CategoryDto {
+public class MenuDto {
 
   @Getter
   @AllArgsConstructor(access = AccessLevel.PUBLIC)
-  public static class CategoryResponse {
+  public static class MenuResponse {
     Long id;
     Integer sequence;
     String type;
@@ -22,40 +22,40 @@ public class CategoryDto {
     Long parentId;
 
     @Builder
-    private CategoryResponse(
-        Category category
+    private MenuResponse(
+        Menu menu
     ) {
-      this.id = category.getId();
-      this.sequence = category.getSequence();
-      this.type = category.getType();
-      this.name = category.getName();
-      this.parentId = category.getParentId();
+      this.id = menu.getId();
+      this.sequence = menu.getSequence();
+      this.type = menu.getType();
+      this.name = menu.getName();
+      this.parentId = menu.getParentId();
     }
   }
 
   @Getter
   @AllArgsConstructor(access = AccessLevel.PUBLIC)
-  public static class CategoryDwResponse {
+  public static class MenuDwResponse {
     Long id;
     Integer sequence;
     String type;
     String name;
-    List<CategoryDwResponse> children;
+    List<MenuDwResponse> children;
 
     @Builder
-    private CategoryDwResponse(
-        Category category
+    private MenuDwResponse(
+        Menu menu
     ) {
-      this.id = category.getId();
-      this.sequence = category.getSequence();
-      this.type = category.getType();
-      this.name = category.getName();
-      this.children = category.getChildren().stream().map(child -> CategoryDwResponse.builder().category(child).build()).collect(Collectors.toList());
+      this.id = menu.getId();
+      this.sequence = menu.getSequence();
+      this.type = menu.getType();
+      this.name = menu.getName();
+      this.children = menu.getChildren().stream().map(child -> MenuDwResponse.builder().menu(child).build()).collect(Collectors.toList());
     }
   }
 
   @Getter
-  public static class CategoryRequest {
+  public static class MenuRequest {
     Long id;
     Integer sequence;
     String type;
@@ -63,7 +63,7 @@ public class CategoryDto {
     Long parentId;
 
     @Builder
-    private CategoryRequest(
+    private MenuRequest(
         Long id,
         Integer sequence,
         String type,
@@ -77,8 +77,8 @@ public class CategoryDto {
       this.parentId = parentId;
     }
 
-    public Category toEntity() {
-      return Category.builder()
+    public Menu toEntity() {
+      return Menu.builder()
           .id(this.id)
           .sequence(this.sequence)
           .type(this.type)
@@ -89,12 +89,12 @@ public class CategoryDto {
   }
 
   @Getter
-  public static class CategoryFilter {
+  public static class MenuFilter {
     Long id;
     String nameL = "%";
 
     @Builder
-    public CategoryFilter(
+    public MenuFilter(
         Long id,
         String nameL
     ) {

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,24 +17,23 @@ public class BoardDto {
   @AllArgsConstructor(access = AccessLevel.PUBLIC)
   public static class BoardResponse {
     Long id;
-    Long categoryId;
+    Long menuId;
     String title;
     String content;
     String writer;
-    LocalDateTime createdDate;
-    LocalDateTime updatedDate;
+    String createdDate;
+    String updatedDate;
 
     @Builder
     private BoardResponse(
         Board board
     ) {
       this.id = board.getId();
-      // this.categoryId = board.getCategory().getId();
       this.title = board.getTitle();
       this.content = board.getContent();
       this.writer = board.getWriter();
-      this.createdDate = board.getCreatedDate();
-      this.updatedDate = board.getUpdatedDate();
+      this.createdDate = board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
+      this.updatedDate = board.getUpdatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
     }
   }
 
@@ -53,7 +53,7 @@ public class BoardDto {
   @Getter
   public static class BoardRequest {
     Long id;
-    Long categoryId;
+    Long menuId;
     String title;
     String content;
     String writer;
@@ -61,13 +61,13 @@ public class BoardDto {
     @Builder
     private BoardRequest(
         Long id,
-        Long categoryId,
+        Long menuId,
         String title,
         String content,
         String writer
     ) {
       this.id = id;
-      this.categoryId = categoryId;
+      this.menuId = menuId;
       this.title = title;
       this.content = content;
       this.writer = writer;
@@ -86,7 +86,7 @@ public class BoardDto {
   @Getter
   public static class BoardFilter {
     Long id;
-    Long categoryId;
+    Long menuId;
     String titleL;
     String contentL;
     String writerL;
@@ -94,13 +94,13 @@ public class BoardDto {
     @Builder
     public BoardFilter(
         Long id,
-        Long categoryId,
+        Long menuId,
         String titleL,
         String contentL,
         String writerL
     ) {
       this.id = id;
-      this.categoryId = categoryId;
+      this.menuId = menuId;
       this.titleL = titleL;
       this.contentL = contentL;
       this.writerL = writerL;

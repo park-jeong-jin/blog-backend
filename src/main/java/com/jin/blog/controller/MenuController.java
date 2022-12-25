@@ -1,7 +1,7 @@
 package com.jin.blog.controller;
 
-import com.jin.blog.dto.CategoryDto;
-import com.jin.blog.service.CategoryService;
+import com.jin.blog.dto.MenuDto;
+import com.jin.blog.service.MenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,33 +13,33 @@ import java.util.List;
 
 @Tag(name = "메뉴", description = "메뉴 관련 api 입니다.")
 @RestController
-@RequestMapping("/category")
-public class CategoryController {
+@RequestMapping("/menu")
+public class MenuController {
 
   @Autowired
-  CategoryService categoryService;
+  MenuService menuService;
 
   @Operation(summary = "메뉴 조회", description = "메뉴 조회입니다.")
   @GetMapping("")
-  public List<CategoryDto.CategoryResponse> findAll(
-      @ModelAttribute CategoryDto.CategoryFilter dto
+  public List<MenuDto.MenuResponse> findAll(
+      @ModelAttribute MenuDto.MenuFilter dto
   ) {
-    return categoryService.findAll(dto);
+    return menuService.findAll(dto);
   }
 
   @Operation(summary = "메뉴 조회", description = "메뉴 조회입니다.")
   @GetMapping("/dw")
-  public List<CategoryDto.CategoryDwResponse> findAllDw(
-      @ModelAttribute CategoryDto.CategoryFilter dto
+  public List<MenuDto.MenuDwResponse> findAllDw(
+      @ModelAttribute MenuDto.MenuFilter dto
   ) {
-    return categoryService.findAllDw(dto);
+    return menuService.findAllDw(dto);
   }
 
   @GetMapping("/{id}")
-  public CategoryDto.CategoryResponse findById(
+  public MenuDto.MenuResponse findById(
       @PathVariable("id") Long id
   ) {
-    return categoryService.find(id);
+    return menuService.find(id);
   }
 
   @Operation(summary = "메뉴 입력", description = "메뉴 입력입니다.")
@@ -48,9 +48,9 @@ public class CategoryController {
   @ResponseStatus(value = HttpStatus.CREATED)
   public Long create(
       @Parameter(description = "board")
-      @RequestBody final CategoryDto.CategoryRequest dto
+      @RequestBody final MenuDto.MenuRequest dto
   ) {
-    return categoryService.create(dto);
+    return menuService.create(dto);
   }
 
   @Operation(summary = "메뉴 수정", description = "메뉴 수정입니다.")
@@ -58,9 +58,9 @@ public class CategoryController {
   @ResponseBody
   @ResponseStatus(value = HttpStatus.OK)
   public Long update(
-      @RequestBody final CategoryDto.CategoryRequest dto
+      @RequestBody final MenuDto.MenuRequest dto
   ) {
-    return categoryService.update(dto);
+    return menuService.update(dto);
   }
 
   @Operation(summary = "메뉴 삭제", description = "메뉴 삭제입니다.")
@@ -69,6 +69,6 @@ public class CategoryController {
   public void delete(
       @PathVariable("id") Long id
   ) {
-    categoryService.delete(id);
+    menuService.delete(id);
   }
 }

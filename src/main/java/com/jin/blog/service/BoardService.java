@@ -1,9 +1,8 @@
 package com.jin.blog.service;
 
 import com.jin.blog.domain.Board;
-import com.jin.blog.domain.Category;
+import com.jin.blog.domain.Menu;
 import com.jin.blog.dto.BoardDto;
-import com.jin.blog.dto.CommentDto;
 import com.jin.blog.repository.BoardRepository;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ public class BoardService {
   @Autowired
   BoardRepository boardRepository;
   @Autowired
-  CategoryService categoryService;
+  MenuService menuService;
 
   public Board findById(Long id) {
     Optional<Board> board = boardRepository.findById(id);
@@ -39,20 +38,20 @@ public class BoardService {
   }
 
   public List<BoardDto.BoardResponse> findAll(BoardDto.BoardFilter dto) {
-    Category category = ObjectUtils.isEmpty(dto.getCategoryId()) ? null : categoryService.findById(dto.getCategoryId());
-    List<Board> boards = boardRepository.findAllByCategory(category);
+    Menu menu = ObjectUtils.isEmpty(dto.getMenuId()) ? null : menuService.findById(dto.getMenuId());
+    List<Board> boards = boardRepository.findAllByMenu(menu);
     return boards.stream().map(Board::toDto).collect(Collectors.toList());
   }
 
   public Page<BoardDto.BoardResponse> findAllPaging(BoardDto.BoardFilter dto, Pageable pageable) {
-    Page<Board> boards = ObjectUtils.isEmpty(dto.getCategoryId()) ? boardRepository.findAll(pageable) : boardRepository.findAllByCategory(categoryService.findById(dto.getCategoryId()), pageable);
+    Page<Board> boards = ObjectUtils.isEmpty(dto.getMenuId()) ? boardRepository.findAll(pageable) : boardRepository.findAllByMenu(menuService.findById(dto.getMenuId()), pageable);
     return boards.map(Board::toDto);
   }
 
   public Long create(BoardDto.BoardRequest dto) {
     Board board = dto.toEntity();
-    Category category = categoryService.findById(dto.getCategoryId());
-    board.setCategory(category);
+    Menu menu = menuService.findById(dto.getMenuId());
+    board.setMenu(menu);
     board.setCreatedDate(LocalDateTime.now());
     boardRepository.save(board);
     return board.getId();

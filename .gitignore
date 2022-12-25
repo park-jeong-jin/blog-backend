@@ -34,3 +34,4 @@ build/
 
 ### Security File ###
 application-maria.properties
+/src/main/resources/application-security.properties

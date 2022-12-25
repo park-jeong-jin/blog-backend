@@ -22,9 +22,9 @@ public class CustomUserService implements UserDetailsService {
   UserRepository userRepository;
 
   public User findByUsername(String username) {
-    Optional<User> account = userRepository.findByUsername(username);
-    account.orElseThrow(() -> new EntityNotFoundException("EntityNotFound"));
-    return account.get();
+    Optional<User> user = userRepository.findByUsername(username);
+    user.orElseThrow(() -> new EntityNotFoundException("EntityNotFound"));
+    return user.get();
   }
 
   @Override

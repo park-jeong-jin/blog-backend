@@ -5,10 +5,10 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
-import org.hibernate.annotations.WhereJoinTable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -29,9 +29,9 @@ public class Board {
   private LocalDateTime createdDate;
   @UpdateTimestamp
   private LocalDateTime updatedDate;
-  @ManyToOne(targetEntity = Category.class, fetch = FetchType.LAZY)
-  @JoinColumn(name = "categoryId")
-  private Category category;
+  @ManyToOne(targetEntity = Menu.class, fetch = FetchType.LAZY)
+  @JoinColumn(name = "menuId")
+  private Menu menu;
   @OneToMany(targetEntity = Comment.class, fetch = FetchType.LAZY)
   @JoinColumn(name = "boardId")
   @Where(clause = "parent_id is null")

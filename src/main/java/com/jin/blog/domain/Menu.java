@@ -1,10 +1,9 @@
 package com.jin.blog.domain;
 
-import com.jin.blog.dto.CategoryDto;
+import com.jin.blog.dto.MenuDto;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class Category {
+public class Menu {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,16 +23,16 @@ public class Category {
   private String name;
   private Long parentId;
   @OneToMany(mappedBy = "parentId", fetch = FetchType.LAZY)
-  private List<Category> children = new ArrayList<>();
+  private List<Menu> children = new ArrayList<>();
 
-  public static CategoryDto.CategoryResponse toDto(Category category) {
-    return CategoryDto.CategoryResponse.builder().category(category).build();
+  public static MenuDto.MenuResponse toDto(Menu menu) {
+    return MenuDto.MenuResponse.builder().menu(menu).build();
   }
 
-  public static CategoryDto.CategoryDwResponse toDtoDw(Category category) {
-    return CategoryDto.CategoryDwResponse.builder().category(category).build();
+  public static MenuDto.MenuDwResponse toDtoDw(Menu menu) {
+    return MenuDto.MenuDwResponse.builder().menu(menu).build();
   }
 
-  public void update(CategoryDto.CategoryRequest dto) {
+  public void update(MenuDto.MenuRequest dto) {
   }
 }

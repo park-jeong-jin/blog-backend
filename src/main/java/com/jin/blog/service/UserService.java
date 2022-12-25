@@ -24,15 +24,15 @@ public class UserService {
   PasswordEncoder passwordEncoder;
 
   public User findById(Long id) {
-    Optional<User> account = userRepository.findById(id);
-    account.orElseThrow(() -> new EntityNotFoundException("EntityNotFound"));
-    return account.get();
+    Optional<User> user = userRepository.findById(id);
+    user.orElseThrow(() -> new EntityNotFoundException("EntityNotFound"));
+    return user.get();
   }
 
   public User findByUsername(String username) {
-    Optional<User> account = userRepository.findByUsername(username);
-    account.orElseThrow(() -> new EntityNotFoundException("EntityNotFound"));
-    return account.get();
+    Optional<User> user = userRepository.findByUsername(username);
+    user.orElseThrow(() -> new EntityNotFoundException("EntityNotFound"));
+    return user.get();
   }
 
   public List<UserDto.UserResponse> findAll(UserDto.UserFilter dto) {
@@ -57,9 +57,9 @@ public class UserService {
     userRepository.delete(user);
   }
 
-  public User login(UserDto.UserLoginRequest dto) throws Exception {
+  public User login(UserDto.UserLoginRequest dto) {
     User user = findByUsername(dto.getUsername());
-    if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) throw new Exception("UserPasswordNotMatched");
+    if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) throw new EntityNotFoundException("UserPasswordNotMatched");
     return user;
   }
 }

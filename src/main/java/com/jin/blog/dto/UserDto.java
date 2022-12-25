@@ -21,6 +21,7 @@ public class UserDto {
     private UserResponse(
         User user
     ) {
+      this.id = user.getId();
       this.username = user.getUsername();
       this.activated = user.getActivated();
       this.role = user.getRole();
